@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"unicode"
 
 	"github.com/go-telegram/bot"
 	"github.com/ltbots/backend/internal/service"
@@ -24,17 +25,26 @@ type Webhook struct {
 	router       *Router
 	messagePrice int64
 	botToken     string
+	secretToken  string
 }
 
 func NewWebhook(url string, service *service.Service, openai *openai.Client, chatModel string, messagePrice int64, botToken string) *Webhook {
+	secretToken := make([]rune, 0, len(botToken))
+	for _, r := range botToken {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			secretToken = append(secretToken, r)
+		}
+	}
+
 	return &Webhook{
 		service:      service,
 		bots:         make(map[int64]func() error),
 		openai:       openai,
 		cahtModel:    chatModel,
-		router:       NewRouter(url, botToken),
+		router:       NewRouter(url, string(secretToken)),
 		messagePrice: messagePrice,
 		botToken:     botToken,
+		secretToken:  string(secretToken),
 	}
 }
 
@@ -77,7 +87,7 @@ func (w *Webhook) notifyBot(ctx context.Context) error {
 
 	if _, err := tgBot.SetWebhook(ctx, &bot.SetWebhookParams{
 		URL:         url,
-		SecretToken: w.botToken,
+		SecretToken: w.secretToken,
 	}); err != nil {
 		return fmt.Errorf("failed to set webhook: %w", err)
 	}
