@@ -1,18 +1,16 @@
 module github.com/ltbots/backend
 
-go 1.24.0
-
-toolchain go1.24.6
+go 1.24.6
 
 require (
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/go-telegram/bot v1.17.0
-	github.com/ltbots/protocols v1.0.2
-	github.com/merzzzl/proto-rest-api v0.0.1-alpha.28
+	github.com/ltbots/protocols v1.0.7
+	github.com/merzzzl/proto-rest-api v0.0.1-alpha.29
 	github.com/rs/zerolog v1.34.0
 	github.com/sashabaranov/go-openai v1.41.1
 	github.com/telegram-mini-apps/init-data-golang v1.5.0
-	google.golang.org/protobuf v1.36.8
+	google.golang.org/protobuf v1.36.11
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/driver/sqlite v1.6.0
 	gorm.io/gorm v1.30.2
